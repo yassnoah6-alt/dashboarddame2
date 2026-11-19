@@ -1,0 +1,145 @@
+<!DOCTYPE html>
+<html lang="es"><head><meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>Destellos Magi · Dashboard de Ventas Navideñas 2026</title>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/4.4.1/chart.umd.min.js"></script>
+<style>
+:root{--red:#c8102e;--green:#1b7a43;--dgreen:#0f4c2a;--gold:#d4a017;--bg:#f7f3ea;--card:#fff;--tx:#23302a;--mut:#6b756f;--line:#e8e1cf;--sh:0 6px 18px rgba(15,76,42,.12);box-sizing:border-box;padding-top:env(safe-area-inset-top,0px);padding-bottom:env(safe-area-inset-bottom,0px);color-scheme:light}
+@media(prefers-color-scheme:dark){:root:not([data-theme="light"]){--bg:#10201a;--card:#1a2e25;--tx:#f3efe3;--mut:#a7b5ac;--line:#2f473b;--sh:0 6px 18px rgba(0,0,0,.4);color-scheme:dark}}
+:root[data-theme="dark"]{--bg:#10201a;--card:#1a2e25;--tx:#f3efe3;--mut:#a7b5ac;--line:#2f473b;--sh:0 6px 18px rgba(0,0,0,.4);color-scheme:dark}
+*{box-sizing:border-box}html{scroll-padding-top:env(safe-area-inset-top,0px)}
+body{margin:0;background:var(--bg);color:var(--tx);font-family:"Segoe UI",system-ui,-apple-system,Roboto,Arial,sans-serif;line-height:1.45}
+header{position:relative;overflow:hidden;text-align:center;color:#fff;padding:28px 16px 34px;background:linear-gradient(135deg,var(--dgreen),var(--green) 55%,var(--red));border-bottom:5px solid var(--gold)}
+header h1{margin:4px 0;font-size:clamp(1.5rem,4.5vw,2.6rem);letter-spacing:.5px}
+header .store{display:inline-block;background:rgba(255,255,255,.16);border:1px solid var(--gold);padding:4px 16px;border-radius:99px;font-weight:700;color:#ffe9a6}
+header p{margin:6px 0 0;opacity:.92}
+.snow{position:absolute;inset:0;pointer-events:none;font-size:18px;opacity:.55}
+.snow span{position:absolute;top:-30px;animation:fall linear infinite}
+@keyframes fall{to{transform:translateY(260px) rotate(180deg)}}
+@media(prefers-reduced-motion:reduce){.snow{display:none}}
+main{max-width:1280px;margin:0 auto;padding:16px}
+.card{background:var(--card);border-radius:18px;box-shadow:var(--sh);border:1px solid var(--line);padding:16px}
+.filters{margin-top:-22px;position:relative;border-top:4px solid var(--gold)}
+.filters h2,.card h3{margin:0 0 10px;font-size:1.02rem}
+.fgrid{display:grid;grid-template-columns:repeat(auto-fit,minmax(150px,1fr));gap:10px;align-items:end}
+label{display:block;font-size:.75rem;font-weight:700;color:var(--mut);margin-bottom:3px}
+select,input{width:100%;padding:9px;border-radius:10px;border:1px solid var(--line);background:var(--bg);color:var(--tx);font:inherit}
+select:focus,input:focus,button:focus-visible{outline:2px solid var(--gold)}
+#clear{width:100%;padding:11px 12px;border:0;border-radius:12px;cursor:pointer;font-weight:800;font-size:.95rem;color:#fff;background:linear-gradient(135deg,var(--red),#e8334f);box-shadow:0 4px 12px rgba(200,16,46,.4);border-bottom:3px solid var(--gold)}
+#clear:hover{transform:translateY(-1px)}
+.badge{margin-top:10px;font-size:.85rem;color:var(--mut)}
+.kpis{display:grid;grid-template-columns:repeat(auto-fit,minmax(170px,1fr));gap:12px;margin:16px 0}
+.kpi{position:relative;overflow:hidden;border-left:6px solid var(--green)}
+.kpi:nth-child(3n+1){border-left-color:var(--red)}.kpi:nth-child(3n){border-left-color:var(--gold)}
+.kpi .ic{position:absolute;right:10px;top:6px;font-size:1.7rem;opacity:.9}
+.kpi small{color:var(--mut);font-weight:700;font-size:.75rem;text-transform:uppercase}
+.kpi b{display:block;font-size:clamp(1.15rem,2.4vw,1.55rem);margin-top:4px;word-break:break-word}
+.kpi em{font-style:normal;font-size:.78rem;color:var(--mut)}
+.grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(min(100%,380px),1fr));gap:14px}
+.cv{position:relative;height:280px}
+.hint{font-size:.72rem;color:var(--mut);margin:6px 0 0}
+.sum{margin-top:16px;border-top:4px solid var(--red)}
+.sum p{margin:8px 0}
+footer{text-align:center;color:var(--mut);font-size:.8rem;padding:18px}
+</style></head><body>
+<header>
+<div class="snow" id="snow"></div>
+<div style="font-size:1.8rem">🎄 ⭐ 🎁 🔔 🦌</div>
+<span class="store">Tienda Navideña “Destellos Magi”</span>
+<h1>Dashboard de Ventas Navideñas 2026</h1>
+<p>Noviembre – Diciembre · Análisis interactivo de transacciones</p>
+</header>
+<main>
+<section class="card filters"><h2>🎅 Filtros</h2>
+<div class="fgrid">
+<div><label for="fD">📅 Desde</label><input type="date" id="fD"></div>
+<div><label for="fH">📅 Hasta</label><input type="date" id="fH"></div>
+<div><label for="fC">🎁 Categoría</label><select id="fC"></select></div>
+<div><label for="fP">🎄 Producto</label><select id="fP"></select></div>
+<div><label for="fV">🧑‍🎄 Vendedor</label><select id="fV"></select></div>
+<div><label for="fM">💳 Método de pago</label><select id="fM"></select></div>
+<div><label for="fK">🛍️ Canal</label><select id="fK"></select></div>
+<div><button id="clear" type="button">❄️ LIMPIAR FILTROS</button></div>
+</div>
+<div class="badge" id="badge"></div></section>
+
+<section class="kpis" id="kpis"></section>
+
+<section class="grid">
+<div class="card"><h3>📈 Ventas por mes ($)</h3><div class="cv"><canvas id="c1"></canvas></div></div>
+<div class="card"><h3>🎁 Ventas por categoría ($)</h3><div class="cv"><canvas id="c2"></canvas></div><p class="hint">Toca un elemento para filtrar.</p></div>
+<div class="card"><h3>⭐ Productos más vendidos (unidades)</h3><div class="cv"><canvas id="c3"></canvas></div><p class="hint">Toca una barra para filtrar por producto.</p></div>
+<div class="card"><h3>💳 Métodos de pago ($)</h3><div class="cv"><canvas id="c4"></canvas></div></div>
+<div class="card"><h3>🧑‍🎄 Ventas por vendedor ($)</h3><div class="cv"><canvas id="c5"></canvas></div></div>
+<div class="card"><h3>🛍️ Canales de venta</h3><div class="cv"><canvas id="c6"></canvas></div></div>
+</section>
+
+<section class="card sum"><h3>📋 Resumen general</h3><div id="sum"></div></section>
+</main>
+<footer>🎄 Datos: Tienda_Navidena_Ventas_100_Registros.xlsx · Total por venta = precio unitario × cantidad</footer>
+
+<script>
+const D=[["2026-12-11","Arboles y Luces","Luces Estilo Cascada Exterior",600,2,"Tarjeta de Crédito","Carlos Mendoza","Tienda Física"],["2026-12-18","Regalos y Empaque","Bota Navideña Personalizable",130,7,"Efectivo","Beatriz Ramos","Tienda Física"],["2026-11-14","Regalos y Empaque","Bota Navideña Personalizable",130,4,"Transferencia","Carlos Mendoza","Línea / Web"],["2026-12-08","Arboles y Luces","Serie de Luces LED Warm White 500p",450,3,"Transferencia","Elena Rostova","Línea / Web"],["2026-11-10","Decoración Hogar","Corona Navideña Pino y Piñas 45cm",420,1,"Transferencia","Beatriz Ramos","Línea / Web"],["2026-11-23","Decoración Hogar","Corona Navideña Pino y Piñas 45cm",420,4,"Efectivo","David Fernández","Tienda Física"],["2026-12-06","Regalos y Empaque","Set Moños y Cintas Decorativas",95,4,"Efectivo","Beatriz Ramos","Tienda Física"],["2026-12-20","Arboles y Luces","Serie de Luces LED Warm White 500p",450,1,"Transferencia","Elena Rostova","Línea / Web"],["2026-12-11","Esferas y Adornos","Punta de Árbol Estrella Iluminada",280,6,"Tarjeta de Crédito","Elena Rostova","Tienda Física"],["2026-12-09","Esferas y Adornos","Set Campanas Doradas Ventana",160,4,"Tarjeta de Crédito","David Fernández","Línea / Web"],["2026-11-18","Regalos y Empaque","Rollo Papel Regalo Navideño 5m",75,6,"Efectivo","Carlos Mendoza","Tienda Física"],["2026-12-22","Figuras y Pesebres","Cascanueces Tradicional Madera 40cm",490,1,"Tarjeta de Crédito","Elena Rostova","Tienda Física"],["2026-12-12","Figuras y Pesebres","Reno de Escarcha con Luces LED",820,2,"Tarjeta de Débito","Carlos Mendoza","Tienda Física"],["2026-12-18","Regalos y Empaque","Set Moños y Cintas Decorativas",95,7,"Transferencia","Elena Rostova","Tienda Física"],["2026-11-09","Figuras y Pesebres","Nacimiento Completo Resina 11 piezas",1450,1,"Efectivo","Carlos Mendoza","Tienda Física"],["2026-12-21","Figuras y Pesebres","Muñeco de Nieve de Peluche 60cm",340,1,"Transferencia","David Fernández","Línea / Web"],["2026-12-04","Regalos y Empaque","Bota Navideña Personalizable",130,2,"Tarjeta de Débito","Elena Rostova","Tienda Física"],["2026-11-19","Esferas y Adornos","Set Figuras Madera Colgantes (12p)",220,1,"Tarjeta de Débito","Carlos Mendoza","Tienda Física"],["2026-12-11","Regalos y Empaque","Rollo Papel Regalo Navideño 5m",75,3,"Tarjeta de Débito","Carlos Mendoza","Tienda Física"],["2026-12-09","Figuras y Pesebres","Nacimiento Completo Resina 11 piezas",1450,1,"Tarjeta de Débito","Elena Rostova","Tienda Física"],["2026-11-04","Regalos y Empaque","Bota Navideña Personalizable",130,2,"Transferencia","Beatriz Ramos","Tienda Física"],["2026-11-09","Figuras y Pesebres","Muñeco de Nieve de Peluche 60cm",340,2,"Tarjeta de Débito","David Fernández","Tienda Física"],["2026-12-05","Decoración Hogar","Vela Aromática Canela y Manzana",150,3,"Transferencia","David Fernández","Tienda Física"],["2026-11-16","Arboles y Luces","Serie de Luces Multicolor 300p",320,1,"Tarjeta de Crédito","Carlos Mendoza","Tienda Física"],["2026-11-05","Arboles y Luces","Serie de Luces LED Warm White 500p",450,1,"Efectivo","Elena Rostova","Tienda Física"],["2026-12-03","Decoración Hogar","Aldea Navideña con Luz y Música",1100,4,"Tarjeta de Crédito","Carlos Mendoza","Línea / Web"],["2026-11-16","Figuras y Pesebres","Papa Noel Gigante Inflable 1.80m",1200,1,"Efectivo","David Fernández","Línea / Web"],["2026-11-28","Figuras y Pesebres","Nacimiento Completo Resina 11 piezas",1450,1,"Efectivo","David Fernández","Línea / Web"],["2026-12-22","Esferas y Adornos","Set Esferas Mate Plata/Azul (30p)",320,4,"Transferencia","Carlos Mendoza","Línea / Web"],["2026-11-12","Figuras y Pesebres","Papa Noel Gigante Inflable 1.80m",1200,1,"Transferencia","Beatriz Ramos","Tienda Física"],["2026-12-12","Arboles y Luces","Árbol Pino artificial 2.10m",2500,1,"Tarjeta de Crédito","David Fernández","Línea / Web"],["2026-12-01","Figuras y Pesebres","Nacimiento Completo Resina 11 piezas",1450,2,"Transferencia","Beatriz Ramos","Línea / Web"],["2026-11-17","Decoración Hogar","Vela Aromática Canela y Manzana",150,4,"Tarjeta de Crédito","Carlos Mendoza","Línea / Web"],["2026-11-14","Regalos y Empaque","Bota Navideña Personalizable",130,6,"Efectivo","Beatriz Ramos","Línea / Web"],["2026-12-03","Esferas y Adornos","Set Esferas Cristal Rojo/Oro (24p)",380,2,"Tarjeta de Crédito","Beatriz Ramos","Tienda Física"],["2026-12-14","Figuras y Pesebres","Nacimiento Completo Resina 11 piezas",1450,2,"Efectivo","Beatriz Ramos","Línea / Web"],["2026-12-13","Regalos y Empaque","Set Moños y Cintas Decorativas",95,5,"Tarjeta de Crédito","Elena Rostova","Tienda Física"],["2026-11-17","Esferas y Adornos","Guirnalda Verde Escarchada 2.5m",210,5,"Transferencia","Elena Rostova","Tienda Física"],["2026-11-01","Regalos y Empaque","Bota Navideña Personalizable",130,2,"Tarjeta de Crédito","Elena Rostova","Tienda Física"],["2026-11-23","Esferas y Adornos","Punta de Árbol Estrella Iluminada",280,5,"Tarjeta de Crédito","David Fernández","Línea / Web"],["2026-12-10","Regalos y Empaque","Bota Navideña Personalizable",130,5,"Efectivo","Carlos Mendoza","Línea / Web"],["2026-11-08","Regalos y Empaque","Rollo Papel Regalo Navideño 5m",75,5,"Tarjeta de Débito","Carlos Mendoza","Línea / Web"],["2026-11-14","Decoración Hogar","Camino de Mesa Estampa Navideña",260,4,"Tarjeta de Débito","Beatriz Ramos","Tienda Física"],["2026-12-11","Decoración Hogar","Corona Navideña Pino y Piñas 45cm",420,1,"Tarjeta de Débito","Carlos Mendoza","Línea / Web"],["2026-11-11","Regalos y Empaque","Bolsa de Regalo Grande Navideña",50,1,"Efectivo","Beatriz Ramos","Tienda Física"],["2026-12-05","Decoración Hogar","Camino de Mesa Estampa Navideña",260,2,"Transferencia","Carlos Mendoza","Tienda Física"],["2026-11-20","Arboles y Luces","Serie de Luces Multicolor 300p",320,1,"Tarjeta de Crédito","Beatriz Ramos","Línea / Web"],["2026-12-20","Figuras y Pesebres","Muñeco de Nieve de Peluche 60cm",340,2,"Tarjeta de Crédito","Carlos Mendoza","Tienda Física"],["2026-11-27","Esferas y Adornos","Guirnalda Verde Escarchada 2.5m",210,6,"Transferencia","Carlos Mendoza","Línea / Web"],["2026-11-11","Figuras y Pesebres","Nacimiento Completo Resina 11 piezas",1450,4,"Tarjeta de Crédito","Carlos Mendoza","Línea / Web"],["2026-11-23","Esferas y Adornos","Set Esferas Mate Plata/Azul (30p)",320,1,"Tarjeta de Crédito","David Fernández","Línea / Web"],["2026-11-18","Decoración Hogar","Cojín Decorativo Reno/Papa Noel",240,4,"Tarjeta de Débito","Beatriz Ramos","Tienda Física"],["2026-11-17","Regalos y Empaque","Set Moños y Cintas Decorativas",95,1,"Efectivo","David Fernández","Línea / Web"],["2026-12-17","Figuras y Pesebres","Muñeco de Nieve de Peluche 60cm",340,1,"Transferencia","Carlos Mendoza","Línea / Web"],["2026-11-03","Arboles y Luces","Proyector LED Figuras Navideñas",550,3,"Tarjeta de Crédito","Elena Rostova","Línea / Web"],["2026-11-05","Decoración Hogar","Camino de Mesa Estampa Navideña",260,3,"Efectivo","Elena Rostova","Línea / Web"],["2026-12-13","Decoración Hogar","Vela Aromática Canela y Manzana",150,3,"Tarjeta de Crédito","Carlos Mendoza","Línea / Web"],["2026-12-13","Esferas y Adornos","Set Campanas Doradas Ventana",160,5,"Transferencia","Beatriz Ramos","Línea / Web"],["2026-11-19","Figuras y Pesebres","Muñeco de Nieve de Peluche 60cm",340,3,"Transferencia","David Fernández","Línea / Web"],["2026-12-14","Regalos y Empaque","Bolsa de Regalo Grande Navideña",50,3,"Efectivo","Elena Rostova","Línea / Web"],["2026-11-06","Decoración Hogar","Pie de Árbol Bordado Terciopelo",390,2,"Tarjeta de Crédito","Beatriz Ramos","Tienda Física"],["2026-11-16","Regalos y Empaque","Bota Navideña Personalizable",130,8,"Transferencia","Carlos Mendoza","Línea / Web"],["2026-12-02","Esferas y Adornos","Set Esferas Mate Plata/Azul (30p)",320,1,"Efectivo","David Fernández","Tienda Física"],["2026-11-12","Figuras y Pesebres","Nacimiento Completo Resina 11 piezas",1450,2,"Efectivo","David Fernández","Tienda Física"],["2026-12-22","Regalos y Empaque","Set Moños y Cintas Decorativas",95,8,"Transferencia","David Fernández","Tienda Física"],["2026-12-18","Figuras y Pesebres","Cascanueces Tradicional Madera 40cm",490,2,"Tarjeta de Débito","David Fernández","Tienda Física"],["2026-11-18","Arboles y Luces","Luces Estilo Cascada Exterior",600,2,"Tarjeta de Crédito","Elena Rostova","Línea / Web"],["2026-11-21","Arboles y Luces","Serie de Luces LED Warm White 500p",450,1,"Tarjeta de Crédito","David Fernández","Tienda Física"],["2026-12-16","Arboles y Luces","Árbol Pino Frondoso Nevado 1.80m",2200,2,"Tarjeta de Débito","David Fernández","Línea / Web"],["2026-11-04","Figuras y Pesebres","Reno de Escarcha con Luces LED",820,1,"Transferencia","David Fernández","Tienda Física"],["2026-11-23","Figuras y Pesebres","Reno de Escarcha con Luces LED",820,2,"Transferencia","Carlos Mendoza","Línea / Web"],["2026-11-28","Arboles y Luces","Árbol Pino Frondoso Nevado 1.80m",2200,2,"Transferencia","Carlos Mendoza","Línea / Web"],["2026-11-09","Regalos y Empaque","Bota Navideña Personalizable",130,7,"Efectivo","Beatriz Ramos","Línea / Web"],["2026-11-09","Esferas y Adornos","Set Esferas Cristal Rojo/Oro (24p)",380,5,"Transferencia","Elena Rostova","Tienda Física"],["2026-11-30","Decoración Hogar","Vela Aromática Canela y Manzana",150,3,"Transferencia","Elena Rostova","Tienda Física"],["2026-12-01","Regalos y Empaque","Bota Navideña Personalizable",130,6,"Tarjeta de Crédito","Beatriz Ramos","Tienda Física"],["2026-12-19","Esferas y Adornos","Set Esferas Mate Plata/Azul (30p)",320,1,"Tarjeta de Crédito","Carlos Mendoza","Tienda Física"],["2026-12-01","Arboles y Luces","Proyector LED Figuras Navideñas",550,1,"Transferencia","Elena Rostova","Línea / Web"],["2026-11-11","Regalos y Empaque","Bota Navideña Personalizable",130,3,"Tarjeta de Débito","Beatriz Ramos","Tienda Física"],["2026-11-20","Figuras y Pesebres","Reno de Escarcha con Luces LED",820,2,"Efectivo","Carlos Mendoza","Tienda Física"],["2026-12-15","Regalos y Empaque","Bota Navideña Personalizable",130,1,"Tarjeta de Débito","David Fernández","Línea / Web"],["2026-11-05","Decoración Hogar","Corona Navideña Pino y Piñas 45cm",420,4,"Transferencia","Beatriz Ramos","Línea / Web"],["2026-11-24","Figuras y Pesebres","Papa Noel Gigante Inflable 1.80m",1200,4,"Tarjeta de Crédito","Elena Rostova","Línea / Web"],["2026-11-30","Regalos y Empaque","Set Moños y Cintas Decorativas",95,6,"Tarjeta de Crédito","Beatriz Ramos","Línea / Web"],["2026-11-29","Figuras y Pesebres","Muñeco de Nieve de Peluche 60cm",340,4,"Tarjeta de Débito","Beatriz Ramos","Línea / Web"],["2026-11-21","Figuras y Pesebres","Papa Noel Gigante Inflable 1.80m",1200,3,"Tarjeta de Débito","Elena Rostova","Línea / Web"],["2026-12-09","Regalos y Empaque","Bota Navideña Personalizable",130,4,"Efectivo","Carlos Mendoza","Línea / Web"],["2026-12-02","Esferas y Adornos","Guirnalda Verde Escarchada 2.5m",210,8,"Transferencia","David Fernández","Tienda Física"],["2026-11-06","Esferas y Adornos","Set Figuras Madera Colgantes (12p)",220,4,"Tarjeta de Débito","Elena Rostova","Línea / Web"],["2026-12-06","Decoración Hogar","Vela Aromática Canela y Manzana",150,3,"Tarjeta de Débito","David Fernández","Línea / Web"],["2026-11-20","Esferas y Adornos","Set Esferas Cristal Rojo/Oro (24p)",380,4,"Tarjeta de Débito","Beatriz Ramos","Tienda Física"],["2026-11-13","Figuras y Pesebres","Cascanueces Tradicional Madera 40cm",490,3,"Efectivo","Carlos Mendoza","Línea / Web"],["2026-11-15","Esferas y Adornos","Punta de Árbol Estrella Iluminada",280,1,"Tarjeta de Crédito","Elena Rostova","Tienda Física"],["2026-11-04","Decoración Hogar","Aldea Navideña con Luz y Música",1100,2,"Transferencia","Beatriz Ramos","Tienda Física"],["2026-12-07","Figuras y Pesebres","Reno de Escarcha con Luces LED",820,4,"Tarjeta de Débito","Carlos Mendoza","Tienda Física"],["2026-11-17","Arboles y Luces","Árbol Pino artificial 2.10m",2500,2,"Transferencia","Beatriz Ramos","Tienda Física"],["2026-11-10","Regalos y Empaque","Set Moños y Cintas Decorativas",95,2,"Tarjeta de Crédito","Beatriz Ramos","Línea / Web"],["2026-12-09","Regalos y Empaque","Rollo Papel Regalo Navideño 5m",75,7,"Transferencia","David Fernández","Línea / Web"],["2026-12-08","Decoración Hogar","Camino de Mesa Estampa Navideña",260,1,"Efectivo","Carlos Mendoza","Tienda Física"],["2026-11-17","Arboles y Luces","Serie de Luces LED Warm White 500p",450,1,"Tarjeta de Crédito","Beatriz Ramos","Tienda Física"]].map(r=>({f:r[0],c:r[1],p:r[2],pr:r[3],q:r[4],m:r[5],v:r[6],k:r[7],t:r[3]*r[4]}));
+const $=id=>document.getElementById(id),money=n=>'$'+Math.round(n).toLocaleString('es-MX'),num=n=>n.toLocaleString('es-MX');
+const sn=$('snow');for(let i=0;i<18;i++){const s=document.createElement('span');s.textContent='❄';s.style.left=(i*5.7)%100+'%';s.style.animationDuration=(6+i%6)+'s';s.style.animationDelay=(-i*0.7)+'s';sn.appendChild(s)}
+const F={c:'fC',p:'fP',v:'fV',m:'fM',k:'fK'},ALL='Todos';
+const uniq=k=>[...new Set(D.map(r=>r[k]))].sort((a,b)=>a.localeCompare(b,'es'));
+const dates=D.map(r=>r.f).sort(),dMin=dates[0],dMax=dates[dates.length-1];
+function fill(id,vals,lbl){$(id).innerHTML='<option value="">'+lbl+'</option>'+vals.map(v=>'<option>'+v+'</option>').join('')}
+fill('fC',uniq('c'),'Todas');fill('fP',uniq('p'),'Todos');fill('fV',uniq('v'),'Todos');fill('fM',uniq('m'),'Todos');fill('fK',uniq('k'),'Todos');
+$('fD').min=$('fH').min=dMin;$('fD').max=$('fH').max=dMax;
+const css=n=>getComputedStyle(document.documentElement).getPropertyValue(n).trim();
+Chart.defaults.font.family='"Segoe UI",system-ui,sans-serif';Chart.defaults.maintainAspectRatio=false;
+const PAL=['#c8102e','#1b7a43','#d4a017','#0f4c2a','#e8657a','#8fbf9f','#f0d27a','#7a0b1f'];
+function group(rows,key,val){const m={};rows.forEach(r=>{m[r[key]]=(m[r[key]]||0)+val(r)});return Object.entries(m)}
+const mkChart=(id,type,opt,onclick)=>new Chart($(id),{type,data:{labels:[],datasets:[]},options:Object.assign({onClick:onclick?(e,els,ch)=>{if(els.length)onclick(ch.data.labels[els[0].index])}:undefined,onHover:(e,els)=>{e.native.target.style.cursor=els.length&&onclick?'pointer':'default'}},opt)});
+const setF=(id,v)=>{$(id).value=v;render()};
+const moneyTip={callbacks:{label:c=>' '+(c.dataset.label?c.dataset.label+': ':'')+money(c.parsed.y??c.parsed.x??c.parsed)}};
+const axes=(h)=>({scales:{x:{grid:{display:h},ticks:{callback:h?v=>money(v):undefined}},y:{grid:{display:!h},beginAtZero:true,ticks:{callback:h?undefined:v=>money(v)}}}});
+const ch={
+ 1:mkChart('c1','bar',Object.assign({plugins:{legend:{display:false},tooltip:moneyTip}},axes(false))),
+ 2:mkChart('c2','doughnut',{plugins:{legend:{position:'bottom'},tooltip:{callbacks:{label:c=>' '+c.label+': '+money(c.parsed)}}}},l=>setF('fC',l)),
+ 3:mkChart('c3','bar',Object.assign({indexAxis:'y',plugins:{legend:{display:false},tooltip:{callbacks:{label:c=>' '+num(c.parsed.x)+' unidades'}}}},{scales:{x:{beginAtZero:true,grid:{display:true}},y:{grid:{display:false}}}}),l=>setF('fP',l)),
+ 4:mkChart('c4','pie',{plugins:{legend:{position:'bottom'},tooltip:{callbacks:{label:c=>' '+c.label+': '+money(c.parsed)}}}},l=>setF('fM',l)),
+ 5:mkChart('c5','bar',Object.assign({plugins:{legend:{display:false},tooltip:moneyTip}},axes(false)),l=>setF('fV',l)),
+ 6:mkChart('c6','bar',Object.assign({plugins:{legend:{position:'bottom'},tooltip:{callbacks:{label:c=>' '+c.dataset.label+': '+(c.dataset.yAxisID==='y'?money(c.parsed.y):num(c.parsed.y))}}},
+   scales:{y:{beginAtZero:true,position:'left',ticks:{callback:v=>money(v)}},y2:{beginAtZero:true,position:'right',grid:{drawOnChartArea:false},ticks:{precision:0}},x:{grid:{display:false}}}}),l=>setF('fK',l))
+};
+function filtered(){const d=$('fD').value,h=$('fH').value;
+ return D.filter(r=>(!d||r.f>=d)&&(!h||r.f<=h)&&Object.keys(F).every(k=>!$(F[k]).value||r[k]===$(F[k]).value))}
+const top=(a,i=1)=>a.slice().sort((x,y)=>y[i]-x[i])[0];
+function render(){
+ const R=filtered();Chart.defaults.color=css('--mut');Chart.defaults.borderColor=css('--line');
+ const act=[...Object.values(F).filter(id=>$(id).value),...['fD','fH'].filter(id=>$(id).value)].length;
+ $('badge').textContent='Mostrando '+R.length+' de '+D.length+' ventas'+(act?' · '+act+' filtro(s) activo(s)':' · sin filtros');
+ const tot=R.reduce((s,r)=>s+r.t,0),un=R.reduce((s,r)=>s+r.q,0);
+ const byP=group(R,'p',r=>r.q),byC=group(R,'c',r=>r.t),byV=group(R,'v',r=>r.t),byM=group(R,'m',r=>r.t),byK=group(R,'k',r=>r.t);
+ const byMo=Object.entries(R.reduce((m,r)=>{const k=r.f.slice(0,7);m[k]=(m[k]||0)+r.t;return m},{})).sort();
+ const mname=k=>{const s=new Date(k+'-15T12:00:00').toLocaleDateString('es-MX',{month:'long',year:'numeric'});return s[0].toUpperCase()+s.slice(1)};
+ const tp=top(byP),tc=top(byC);
+ const K=[['💰','Ventas totales',money(tot),'Ingresos acumulados'],['🧾','Número de ventas',num(R.length),'Transacciones'],['🎁','Unidades vendidas',num(un),'Artículos'],['🏷️','Precio promedio por venta',R.length?money(tot/R.length):'$0','Total ÷ ventas'],['⭐','Producto más vendido',tp?tp[0]:'—',tp?num(tp[1])+' unidades':''],['🎄','Categoría con más ingresos',tc?tc[0]:'—',tc?money(tc[1]):'']];
+ $('kpis').innerHTML=K.map(k=>'<div class="card kpi"><span class="ic">'+k[0]+'</span><small>'+k[1]+'</small><b>'+k[2]+'</b><em>'+k[3]+'</em></div>').join('');
+ const up=(c,l,v,col,x)=>{c.data.labels=l;c.data.datasets=[{data:v,backgroundColor:col,borderRadius:8,borderColor:css('--card'),borderWidth:x||0}];c.update()};
+ const bm=byMo;up(ch[1],bm.map(e=>mname(e[0])),bm.map(e=>e[1]),['#1b7a43','#c8102e']);
+ const sc=byC.sort((a,b)=>b[1]-a[1]);up(ch[2],sc.map(e=>e[0]),sc.map(e=>e[1]),PAL,2);
+ const sp=byP.sort((a,b)=>b[1]-a[1]).slice(0,8);up(ch[3],sp.map(e=>e[0]),sp.map(e=>e[1]),'#d4a017');
+ const sm=byM.sort((a,b)=>b[1]-a[1]);up(ch[4],sm.map(e=>e[0]),sm.map(e=>e[1]),PAL,2);
+ const sv=byV.sort((a,b)=>b[1]-a[1]);up(ch[5],sv.map(e=>e[0]),sv.map(e=>e[1]),['#c8102e','#1b7a43','#d4a017','#0f4c2a']);
+ const kl=uniq('k'),kv=kl.map(k=>R.filter(r=>r.k===k));
+ ch[6].data.labels=kl;ch[6].data.datasets=[{label:'Ingresos ($)',data:kv.map(a=>a.reduce((s,r)=>s+r.t,0)),backgroundColor:'#c8102e',borderRadius:8,yAxisID:'y'},{label:'Nº de ventas',data:kv.map(a=>a.length),backgroundColor:'#1b7a43',borderRadius:8,yAxisID:'y2'}];ch[6].update();
+ // resumen
+ if(!R.length){$('sum').innerHTML='<p>No hay ventas con los filtros seleccionados. Presiona <b>LIMPIAR FILTROS</b> para ver toda la información.</p>';return}
+ const pc=(a,b)=>b?Math.round(a/b*100)+'%':'0%',tv=top(byV),tm=top(byM),tk=top(byK);
+ const ven=byV.slice().sort((a,b)=>b[1]-a[1]),last=ven[ven.length-1];
+ let t='<p>🛒 Se registraron <b>'+R.length+' ventas</b> por <b>'+money(tot)+'</b>, con <b>'+num(un)+' unidades</b> y un ticket promedio de <b>'+money(tot/R.length)+'</b>.</p>';
+ if(bm.length>1){const b=top(bm);t+='<p>📈 El mes más fuerte fue <b>'+mname(b[0])+'</b> con '+money(b[1])+' ('+pc(b[1],tot)+' del total).</p>'}
+ t+='<p>⭐ El producto más vendido es <b>'+tp[0]+'</b> ('+num(tp[1])+' unidades). La categoría más rentable es <b>'+tc[0]+'</b>, con '+money(tc[1])+' ('+pc(tc[1],tot)+' de los ingresos).</p>';
+ t+='<p>🧑‍🎄 <b>'+tv[0]+'</b> lidera a los vendedores con '+money(tv[1])+' ('+pc(tv[1],tot)+')'+(ven.length>1?'; en el extremo opuesto está '+last[0]+' con '+money(last[1]):'')+'.</p>';
+ t+='<p>💳 El método de pago preferido es <b>'+tm[0]+'</b> ('+pc(tm[1],tot)+' de los ingresos) y el canal con más ingresos es <b>'+tk[0]+'</b> ('+pc(tk[1],tot)+').</p>';
+ $('sum').innerHTML=t;
+}
+['fD','fH','fC','fP','fV','fM','fK'].forEach(id=>$(id).addEventListener('change',render));
+$('clear').addEventListener('click',()=>{['fD','fH','fC','fP','fV','fM','fK'].forEach(id=>$(id).value='');render()});
+matchMedia('(prefers-color-scheme:dark)').addEventListener?.('change',render);
+render();
+</script></body></html>
